@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+		 crossorigin="anonymous">
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+		<script src="https://webrtchacks.github.io/adapter/adapter-latest.js"></script>
+		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+		 crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+		 crossorigin="anonymous"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+		 crossorigin="anonymous"></script>
+		<script type="text/javascript" src="//static.runoob.com/assets/qrcode/qrcode.min.js"></script>
+		<script src="js/main.js"></script>
+		<script src="js/peer.js"></script>
+		<script src="js/fileTransf.js"></script>
+		<script src="js/template.js"></script>
+
+	</head>
+	<body>
+		<div class="container">
+			<div class="row clearfix" style="margin-top: 50px;">
+				<div class="col-md-6 column">
+					<div class="btn-group">
+						<table>
+							<tr>
+								<td><button type="button" class="btn btn-success" onclick="sendRoomId()">加入房间</button></td>
+								<td><input type="text" class="form-control" id="key" placeholder="房间号" size="4" /></td>
+							</tr>
+							<tr>
+								<td><button type="button" class="btn btn-success" onclick="init()">建立连接</button></td>
+							</tr>
+							<tr>
+								<td><button type="button" class="btn btn-success">连接用户</button></td>
+								<td><button type="button" class="btn btn-success">打洞状态</button></td>
+								<td><button type="button" class="btn btn-success">通道状态</button></td>
+							</tr>
+						</table>
+					</div>
+					<div>
+						<table id="linkedPeer">
+						</table>
+					</div>
+				</div>
+				<div class="col-md-6 column">
+					<form role="form">
+						<div class="form-group">
+							<table>
+								<tr>
+									<td><input type="button" class="btn btn-success" value="我的ID"></td>
+									<td><input type="button" class="btn btn-success" value="我的ID" id="myId"></td>
+								</tr>
+								<tr>
+									<td><input type="button" value="发送消息" class="btn btn-success" onclick="sendChat()"></td>
+									<td><input type="text" class="form-control" id="send_message" /></td>
+								</tr>
+							</table>
+						</div>
+						<div class="form-group">
+							<textarea id="rec_message" class="form-control" style="height: 200px; width: 400px;"></textarea>
+						</div>
+						<div class="form-group">
+							<table>
+								<tr>
+									<td><input type="button" class="btn btn-success" value="发送文件" onclick="startUpload()" /></td>
+									<td><input type="button" id="i-check" value="浏览" class="btn btn-success" onclick="$('#filein').click();"></td>
+									<td><input id='location' class="form-control" disabled></td>
+								</tr>
+							</table>
+							<input type="file" id='filein' onchange="$('#location').val($('#filein').val());" style="display: none">
+						</div>
+						<div id="progressList">
+							<input type="button" class="btn btn-success" value="发送进度"/>
+							<div class="progress" style="height: 20px;">
+								<div id="sendBar" class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="25" aria-valuemin="0"
+								 aria-valuemax="100"></div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script>
+		function createEle(formUid){
+			var html = template(document.getElementById('reBarList').innerHTML,{list: [{id: "From:"+formUid}]});
+			document.getElementById('progressList').innerHTML += html;
+		}
+	</script>
+	<script id="reBarList" type="text/html">
+		<input type="button" class="btn btn-success" value=<%:=list[0].id%> />
+		<div class="progress" style="height: 20px;">
+			<div id=<%:=list[0].id%> class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="25" aria-valuemin="0"
+			 aria-valuemax="100"></div>
+		</div>
+	</script>
+</html>
